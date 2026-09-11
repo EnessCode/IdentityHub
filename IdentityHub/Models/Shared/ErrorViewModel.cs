@@ -1,4 +1,4 @@
-namespace IdentityHub.Models
+namespace IdentityHub.Models.Shared
 {
     public class ErrorViewModel
     {
