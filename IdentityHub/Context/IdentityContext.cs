@@ -9,5 +9,7 @@ namespace IdentityHub.Context
 		public IdentityContext(DbContextOptions<IdentityContext> options) : base(options)
 		{
 		}
+		public DbSet<Category> Categories { get; set; }
+		public DbSet<Message> Messages { get; set; }
 	}
 }
