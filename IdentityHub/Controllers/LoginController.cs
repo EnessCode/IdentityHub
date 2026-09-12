@@ -2,16 +2,19 @@
 using Microsoft.AspNetCore.Mvc;
 using IdentityHub.Entities;
 using IdentityHub.Models.User;
+using IdentityHub.Context;
 
 namespace IdentityHub.Controllers
 {
 	public class LoginController : Controller
 	{
 		private readonly SignInManager<AppUser> _signInManager;
+		private readonly IdentityContext _context;
 
-		public LoginController(SignInManager<AppUser> signInManager)
+		public LoginController(SignInManager<AppUser> signInManager, IdentityContext context)
 		{
 			_signInManager = signInManager;
+			_context = context;
 		}
 
 		[HttpGet]
@@ -28,15 +31,31 @@ namespace IdentityHub.Controllers
 				return View(model);
 			}
 
+			var user = _context.Users.FirstOrDefault(x => x.UserName == model.Username);
+
+			if (user == null)
+			{
+				ModelState.AddModelError("", "Kullanıcı adı veya şifre hatalı.");
+				return View(model);
+			}
+
+			if (!user.EmailConfirmed)
+			{
+				ModelState.AddModelError("", "Lütfen giriş yapmadan önce e-posta adresinizi doğrulayın.");
+				return View(model);
+			}
+
 			var result = await _signInManager.PasswordSignInAsync(model.Username, model.Password, true, true);
+
 			if (result.Succeeded)
 			{
-				return RedirectToAction("Index", "Home");
+				return RedirectToAction("EditProfile", "Profile");
 			}
 			else
 			{
 				ModelState.AddModelError("", "Kullanıcı adı veya şifre hatalı.");
 			}
+
 			return View(model);
 		}
 	}
