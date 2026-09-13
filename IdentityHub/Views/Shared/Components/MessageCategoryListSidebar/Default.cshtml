@@ -1,6 +1,6 @@
 ﻿@model List<Category>
 
-@foreach (var item in Model)
+@foreach (var item in Model.Where(x => x.Status == true))
 {
 	<div class="inbox-status">
 		<ul class="inbox-st-nav">
