@@ -76,14 +76,14 @@ namespace IdentityHub.Controllers
 			return View(messages);
 		}
 
-		public IActionResult MessageDetail(int id)
+		public IActionResult Detail(int id)
 		{
 			var messages = _context.Messages.Where(x => x.Id == id).FirstOrDefault();
 			return View(messages);
 		}
 
 		[HttpGet]
-		public IActionResult ComposeMessage()
+		public IActionResult Compose()
 		{
 			var categories = _context.Categories.ToList();
 			ViewBag.c = categories.Select(c => new SelectListItem
@@ -96,7 +96,7 @@ namespace IdentityHub.Controllers
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> ComposeMessage(Message message)
+		public async Task<IActionResult> Compose(Message message)
 		{
 			var user = await _userManager.FindByNameAsync(User.Identity.Name);
 

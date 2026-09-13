@@ -15,14 +15,14 @@ namespace IdentityHub.Controllers
 		}
 
 		[HttpGet]
-		public IActionResult UserActivation(string email)
+		public IActionResult Index(string email)
 		{
 			ViewBag.Email = email; 
 			return View();
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> UserActivation(string email, int userCode)
+		public async Task<IActionResult> Index(string email, int userCode)
 		{
 			var user = await _userManager.FindByEmailAsync(email);
 			if (user == null)
@@ -36,7 +36,7 @@ namespace IdentityHub.Controllers
 				user.EmailConfirmed = true;
 				await _userManager.UpdateAsync(user);
 
-				return RedirectToAction("Login", "Login");
+				return RedirectToAction("Index", "Login");
 			}
 
 			ModelState.AddModelError("", "Hatalı doğrulama kodu girdiniz.");

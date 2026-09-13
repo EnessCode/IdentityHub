@@ -15,7 +15,7 @@ namespace IdentityHub.Controllers
 		}
 
 		[HttpGet]
-		public async Task<IActionResult> EditProfile()
+		public async Task<IActionResult> Index()
 		{
 			var user = await _userManager.FindByNameAsync(User.Identity.Name);
 			UserEditViewModel userEditViewModel = new UserEditViewModel()
@@ -32,7 +32,7 @@ namespace IdentityHub.Controllers
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> EditProfile(UserEditViewModel model)
+		public async Task<IActionResult> Index(UserEditViewModel model)
 		{
 			if (ModelState.IsValid)
 			{
@@ -54,7 +54,7 @@ namespace IdentityHub.Controllers
 
 				if (result.Succeeded)
 				{
-					return RedirectToAction("EditProfile", "Profile");
+					return RedirectToAction("Index", "Profile");
 				}
 
 				foreach (var error in result.Errors)

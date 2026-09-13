@@ -12,16 +12,18 @@
 				@await Component.InvokeAsync("MessageSidebar")
 			</div>
 			<div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
-				<div class="inbox-text-list sm-res-mg-t-30">
+				<div class="inbox-text-list sm-res-mg-t-30" style="background: #fff; padding: 30px; border-radius: 4px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+
 					<div class="form-group">
 						<div class="nk-int-st search-input search-overt">
 							<input type="text" class="form-control" placeholder="E-posta ara..." />
 							<button class="btn search-ib">Ara</button>
 						</div>
 					</div>
+
 					<div class="inbox-btn-st-ls btn-toolbar">
 						<div class="btn-group ib-btn-gp active-hook nk-email-inbox">
-							<button class="btn btn-default btn-sm"><i class="notika-icon notika-refresh"></i> Yenile</button>
+							<a href="/Message/Sendbox" class="btn btn-default btn-sm"><i class="notika-icon notika-refresh"></i> Yenile</a>
 							<button class="btn btn-default btn-sm"><i class="notika-icon notika-next"></i></button>
 							<button class="btn btn-default btn-sm"><i class="notika-icon notika-down-arrow"></i></button>
 							<button class="btn btn-default btn-sm"><i class="notika-icon notika-trash"></i></button>
@@ -33,41 +35,51 @@
 							<button class="btn btn-default btn-sm"><i class="notika-icon notika-right-arrow"></i></button>
 						</div>
 					</div>
-					<div class="table-responsive">
-						<table class="table table-hover table-striped table-inbox">
-							<thead>
-								<tr>
-									<th style="width: 5%;"><label><input type="checkbox" class="i-checks"></label></th>
-									<th style="width: 20%;">Alıcı</th>
-									<th style="width: 15%;">Kategori</th>
-									<th style="width: 40%;">Konu</th>
-									<th style="width: 20%;" class="text-right">Tarih</th>
-								</tr>
-							</thead>
-							<tbody>
-								@foreach (var item in Model)
-								{
+
+					@if (Model != null && Model.Count > 0)
+					{
+						<div class="table-responsive">
+							<table class="table table-hover table-striped table-inbox">
+								<thead>
 									<tr>
-										<td>
-											<label><input type="checkbox" class="i-checks"></label>
-										</td>
-										<td>
-											<a href="/Message/MessageDetail/@item.Id/">@item.ReceiverName @item.ReceiverSurname</a>
-										</td>
-										<td>
-											<span class="label label-warning">@item.CategoryName</span>
-										</td>
-										<td>
-											<a href="/Message/MessageDetail/@item.Id/"><strong>@item.Subject</strong></a>
-										</td>
-										<td class="text-right mail-date" style="white-space: nowrap;">
-											@item.SentAt.ToString("dd MMMM yyyy")
-										</td>
+										<th style="width: 5%;"><label><input type="checkbox" class="i-checks"></label></th>
+										<th style="width: 20%;">Alıcı</th>
+										<th style="width: 15%;">Kategori</th>
+										<th style="width: 40%;">Konu</th>
+										<th style="width: 20%;" class="text-right">Tarih</th>
 									</tr>
-								}
-							</tbody>
-						</table>
-					</div>
+								</thead>
+								<tbody>
+									@foreach (var item in Model)
+									{
+										<tr>
+											<td>
+												<label><input type="checkbox" class="i-checks"></label>
+											</td>
+											<td>
+												<a href="/Message/Detail/@item.Id" style="color: #333; text-decoration: none;">@item.ReceiverName @item.ReceiverSurname</a>
+											</td>
+											<td>
+												<span class="label label-warning" style="padding: 5px 10px; border-radius: 10px;">@item.CategoryName</span>
+											</td>
+											<td>
+												<a href="/Message/Detail/@item.Id" style="color: #00c292; text-decoration: none;"><strong>@item.Subject</strong></a>
+											</td>
+											<td class="text-right mail-date" style="white-space: nowrap; color: #999;">
+												@item.SentAt.ToString("dd.MM.yyyy HH:mm")
+											</td>
+										</tr>
+									}
+								</tbody>
+							</table>
+						</div>
+					}
+					else
+					{
+						<div class="alert alert-info" role="alert" style="margin-top: 20px; border-left: 5px solid #00c292;">
+							<strong>Bilgi:</strong> Giden kutunuzda henüz hiç mesaj bulunmuyor.
+						</div>
+					}
 				</div>
 			</div>
 		</div>

@@ -1,0 +1,45 @@
+﻿@using IdentityHub.Models.Role
+@model UpdateRoleViewModel
+@{
+	ViewData["Title"] = "Rol Güncelle";
+}
+
+<div class="form-element-area">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+				<div class="form-element-list" style="background-color: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+					<div class="basic-tb-hd" style="margin-bottom: 20px; border-bottom: 2px solid #f5f5f5; padding-bottom: 15px;">
+						<h2 style="margin: 0; color: #333;">Rol Güncelle</h2>
+						<p style="margin-top: 5px; color: #666;">Lütfen güncellemek istediğiniz rol adını aşağıya giriniz.</p>
+					</div>
+					<form method="post">
+						<div class="text-danger p-b-20" asp-validation-summary="ModelOnly"></div>
+
+						<input type="hidden" asp-for="Id" />
+
+						<div class="row">
+							<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+								<div class="form-group">
+									<div class="nk-int-st">
+										<input type="text" asp-for="Name" class="form-control" placeholder="Rol Adı">
+										<span asp-validation-for="Name" class="text-danger"></span>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 mt-3">
+								<div class="form-group">
+									<div class="nk-int-st">
+										<button type="submit" class="btn btn-primary" style="margin-right: 10px;">Değişiklikleri Kaydet</button>
+										<a href="/Role/Index/" class="btn btn-warning">İptal</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

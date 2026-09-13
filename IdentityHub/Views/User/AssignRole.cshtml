@@ -1,0 +1,48 @@
+﻿@using IdentityHub.Models.Role
+@model List<AssignRoleViewModel>
+@{
+	ViewData["Title"] = "Rol Ata";
+}
+
+<div class="container" style="margin-top: 40px; margin-bottom: 40px;">
+	<div class="row justify-content-center">
+		<div class="col-lg-5 col-md-8 col-sm-12">
+
+			<div style="background-color: #fff; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); overflow: hidden;">
+				<div style="padding: 30px 30px 20px 30px; border-bottom: 1px solid #f0f0f0;">
+					<h3 style="margin: 0; color: #2c3e50; font-size: 22px;">Rol Atama</h3>
+					<p style="margin: 5px 0 0 0; color: #6c757d; font-size: 14px;">Kullanıcıya atamak istediğiniz rolleri seçiniz.</p>
+				</div>
+
+				<div style="padding: 30px;">
+					<form method="post">
+						<div style="margin-bottom: 25px;">
+							@for (int i = 0; i < Model.Count; i++)
+							{
+								<label style="display: flex; align-items: center; padding: 15px 20px; background-color: #f8f9fa; border: 1px solid #e9ecef; border-radius: 8px; margin-bottom: 10px; cursor: pointer;">
+									<input type="hidden" asp-for="@Model[i].Id" />
+									<input type="hidden" asp-for="@Model[i].Name" />
+
+									<input type="checkbox" asp-for="@Model[i].RoleExist" style="width: 18px; height: 18px; margin: 0; cursor: pointer;" />
+									<span style="margin-left: 15px; font-weight: 500; color: #495057; font-size: 15px;">
+										@Model[i].Name
+									</span>
+								</label>
+							}
+						</div>
+
+						<div style="text-align: right; border-top: 1px solid #f0f0f0; padding-top: 20px;">
+							<a href="/User/Index/" class="btn btn-light" style="border: 1px solid #dcdcdc; margin-right: 10px; padding: 8px 20px;">
+								İptal
+							</a>
+							<button type="submit" class="btn btn-primary" style="padding: 8px 25px;">
+								Kaydet
+							</button>
+						</div>
+					</form>
+				</div>
+			</div>
+
+		</div>
+	</div>
+</div>

@@ -18,13 +18,13 @@ namespace IdentityHub.Controllers
 		}
 
 		[HttpGet]
-		public IActionResult Login()
+		public IActionResult Index() 
 		{
 			return View();
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> Login(LoginViewModel model)
+		public async Task<IActionResult> Index(LoginViewModel model)
 		{
 			if (!ModelState.IsValid)
 			{
@@ -49,7 +49,7 @@ namespace IdentityHub.Controllers
 
 			if (result.Succeeded)
 			{
-				return RedirectToAction("EditProfile", "Profile");
+				return RedirectToAction("Index", "Profile");
 			}
 			else
 			{

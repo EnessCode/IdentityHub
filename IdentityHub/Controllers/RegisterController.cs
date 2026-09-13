@@ -20,13 +20,13 @@ namespace IdentityHub.Controllers
 		}
 
 		[HttpGet]
-		public IActionResult Register()
+		public IActionResult Index()
 		{
 			return View();
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> Register(RegisterViewModel model)
+		public async Task<IActionResult> Index(RegisterViewModel model)
 		{
 			if (!ModelState.IsValid) return View(model);
 
@@ -44,7 +44,7 @@ namespace IdentityHub.Controllers
 			if (result.Succeeded)
 			{
 				await _emailService.SendActivationEmailAsync(model.Email, code);
-				return RedirectToAction("UserActivation", "Activation", new { email = model.Email });
+				return RedirectToAction("Index", "Activation", new { email = model.Email });
 			}
 
 			foreach (var error in result.Errors)
