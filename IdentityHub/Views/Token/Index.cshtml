@@ -1,0 +1,55 @@
+﻿@using IdentityHub.Models.Jwt
+@model UserTokenViewModel
+@{
+	ViewData["Title"] = "API Token Yönetimi";
+}
+
+<div class="form-element-area" style="margin-top: 30px; margin-bottom: 30px;">
+	<div class="container">
+		<div class="row justify-content-center">
+			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+				<div class="form-element-list" style="background-color: #fff; padding: 40px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+					
+					<div class="basic-tb-hd" style="margin-bottom: 30px; border-bottom: 1px solid #f0f0f0; padding-bottom: 15px;">
+						<h2 style="margin: 0; color: #2c3e50; font-size: 24px;">API Token Üretici</h2>
+						<p style="margin: 8px 0 0 0; color: #6c757d; font-size: 14px;">Uygulama dışı entegrasyonlar için size özel üretilmiş JWT erişim anahtarı.</p>
+					</div>
+
+					<div class="row">
+						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-bottom: 20px;">
+							<div class="alert alert-success" role="alert" style="border-left: 5px solid #28a745;">
+								<strong>Kullanıcı:</strong> @Model.Name @Model.Surname (@Model.Username)
+							</div>
+						</div>
+
+						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-bottom: 20px;">
+							<div class="form-group">
+								<label style="font-weight: 500; color: #555;">Kişisel Bearer Token'ınız</label>
+								<div class="nk-int-st">
+									<textarea id="tokenArea" class="form-control" rows="6" readonly style="background-color: #f8f9fa; cursor: text; resize: none; font-family: monospace; font-size: 13px;">@Model.Token</textarea>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="text-align: right;">
+							<button onclick="copyToken()" class="btn btn-info" style="padding: 10px 30px; font-size: 15px;">
+								<i class="notika-icon notika-windows"></i> Token'ı Kopyala
+							</button>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+	function copyToken() {
+		var copyText = document.getElementById("tokenArea");
+		copyText.select();
+		copyText.setSelectionRange(0, 99999);
+		navigator.clipboard.writeText(copyText.value);
+		alert("Token panoya kopyalandı!");
+	}
+</script>
