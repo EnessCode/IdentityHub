@@ -21,6 +21,12 @@ builder.Services.AddIdentity<AppUser, IdentityRole>()
 	.AddEntityFrameworkStores<IdentityContext>()
 	.AddErrorDescriber<CustomIdentityValidator>();
 
+builder.Services.ConfigureApplicationCookie(options =>
+{
+	options.LoginPath = "/Login/Index";
+	options.AccessDeniedPath = "/ErrorPage/Page403";
+});
+
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
 
 var jwtSettings = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>();
@@ -51,6 +57,8 @@ if (!app.Environment.IsDevelopment())
 	// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
 	app.UseHsts();
 }
+
+app.UseStatusCodePagesWithReExecute("/ErrorPage/Page{0}");
 
 app.UseHttpsRedirection();
 app.UseRouting();
