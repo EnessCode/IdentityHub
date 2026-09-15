@@ -18,7 +18,7 @@ namespace IdentityHub.Controllers
 			_userManager = userManager;
 		}
 
-		public async Task<IActionResult> Inbox()
+		public async Task<IActionResult> Inbox(int? categoryId)
 		{
 			var user = await _userManager.FindByNameAsync(User.Identity.Name);
 
@@ -31,7 +31,7 @@ namespace IdentityHub.Controllers
 							on m.CategoryId equals c.Id into categoryGroup
 							from category in categoryGroup.DefaultIfEmpty()
 
-							where m.ReceiverEmail == user.Email
+							where m.ReceiverEmail == user.Email && (!categoryId.HasValue || m.CategoryId == categoryId.Value)
 							select new MessageWithSenderInfoViewModel
 							{
 								Id = m.Id,
@@ -47,7 +47,7 @@ namespace IdentityHub.Controllers
 			return View(messages);
 		}
 
-		public async Task<IActionResult> Sendbox()
+		public async Task<IActionResult> Sendbox(int? categoryId)
 		{
 			var user = await _userManager.FindByNameAsync(User.Identity.Name);
 
@@ -60,7 +60,7 @@ namespace IdentityHub.Controllers
 							on m.CategoryId equals c.Id into categoryGroup
 							from category in categoryGroup.DefaultIfEmpty()
 
-							where m.SenderEmail == user.Email
+							where m.SenderEmail == user.Email && (!categoryId.HasValue || m.CategoryId == categoryId.Value)
 							select new MessageWithReceiverInfoViewModel
 							{
 								Id = m.Id,

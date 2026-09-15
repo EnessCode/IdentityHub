@@ -4,7 +4,7 @@
 @await Html.PartialAsync("_HeadPartial")
 
 <body>
-	@await Html.PartialAsync("_HeaderTopPartial")
+	@await Component.InvokeAsync("HeaderTop")
 
 	@await Html.PartialAsync("_MobileMenuPartial")
 
