@@ -1,0 +1,110 @@
+﻿@using IdentityHub.Entities
+@model List<Comment>
+@{
+	ViewData["Title"] = "Yorum Yönetimi";
+}
+
+<div class="form-element-area">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+				<div class="form-element-list" style="background-color: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+
+					<form asp-action="UpdateAllStatuses" asp-controller="Comment" method="post">
+
+						<div class="basic-tb-hd" style="margin-bottom: 20px; border-bottom: 2px solid #f5f5f5; padding-bottom: 15px; display: flex; justify-content: space-between; align-items: center;">
+							<h2 style="margin: 0; color: #333;">Yorum Yönetimi (Toplu Güncelleme)</h2>
+
+							<button type="submit" style="background-color: #00c292; color: white; border: none; padding: 8px 20px; border-radius: 4px; font-size: 13px; font-weight: bold; cursor: pointer;">
+								<i class="notika-icon notika-checked"></i> Tüm Değişiklikleri Kaydet
+							</button>
+						</div>
+
+						<div class="row">
+							@if (Model != null && Model.Any())
+							{
+								@foreach (var item in Model)
+								{
+									<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-bottom: 15px;">
+										<div style="display: flex; gap: 15px; padding: 15px; border: 1px solid #eaeaea; border-radius: 8px; background-color: #fbfbfb;">
+
+											<div style="flex-shrink: 0;">
+												@if (!string.IsNullOrEmpty(item.AppUser?.ImageUrl))
+												{
+													<img src="@item.AppUser.ImageUrl" alt="User" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 2px solid #ddd;" />
+												}
+												else
+												{
+													<div style="width: 50px; height: 50px; border-radius: 50%; background-color: #00c292; color: white; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: bold;">
+														@(item.AppUser?.Name?.Substring(0, 1) ?? "U")
+													</div>
+												}
+											</div>
+
+											<div style="flex-grow: 1;">
+												<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+													<h5 style="margin: 0; font-size: 15px; font-weight: 600; color: #333;">
+														@(item.AppUser?.Name + " " + item.AppUser?.Surname ?? "Bilinmeyen Kullanıcı")
+													</h5>
+													<span style="font-size: 12px; color: #999;"><i class="notika-icon notika-calendar"></i> @item.SentAt.ToString("dd.MM.yyyy HH:mm")</span>
+												</div>
+
+												<p style="margin: 0 0 10px 0; color: #555; font-size: 14px; line-height: 1.6;">
+													@item.CommentDetail
+												</p>
+
+												<div style="display: flex; align-items: center; justify-content: space-between;">
+
+													<div>
+														@switch (item.Status)
+														{
+															case CommentStatus.Onaylandi:
+																<span style="background-color: #00c292; color: white; padding: 3px 12px; border-radius: 12px; font-size: 11px; font-weight: bold;">Aktif</span>
+																break;
+															case CommentStatus.OnayBekliyor:
+																<span style="background-color: #00bcd4; color: white; padding: 3px 12px; border-radius: 12px; font-size: 11px; font-weight: bold;">Onay Bekliyor</span>
+																break;
+															case CommentStatus.Toksik:
+																<span style="background-color: #ff9800; color: white; padding: 3px 12px; border-radius: 12px; font-size: 11px; font-weight: bold;">Toksik</span>
+																break;
+															case CommentStatus.Reddedildi:
+																<span style="background-color: #F44336; color: white; padding: 3px 12px; border-radius: 12px; font-size: 11px; font-weight: bold;">Reddedildi</span>
+																break;
+														}
+													</div>
+
+													<div style="display: flex; align-items: center; gap: 15px;">
+														<select name="statuses[@item.Id]" class="form-control" style="height: 30px; padding: 2px 10px; font-size: 12px; border-radius: 4px; border: 1px solid #ccc;">
+															<option value="1" selected="@(item.Status == CommentStatus.OnayBekliyor)">Onay Bekliyor</option>
+															<option value="2" selected="@(item.Status == CommentStatus.Onaylandi)">Onaylandı</option>
+															<option value="3" selected="@(item.Status == CommentStatus.Reddedildi)">Reddedildi</option>
+															<option value="4" selected="@(item.Status == CommentStatus.Toksik)">Toksik</option>
+														</select>
+
+														<a href="/Comment/Delete/@item.Id" onclick="return confirm('Bu yorumu silmek istediğinize emin misiniz?');" style="color: #F44336; font-size: 13px; font-weight: 600; text-decoration: none;">
+															<i class="notika-icon notika-trash"></i> Sil
+														</a>
+													</div>
+
+												</div>
+											</div>
+
+										</div>
+									</div>
+								}
+							}
+							else
+							{
+								<div class="col-12" style="padding: 30px; text-align: center; color: #888;">
+									<p>Sistemde henüz kayıtlı bir yorum bulunmuyor.</p>
+								</div>
+							}
+						</div>
+
+					</form>
+
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
