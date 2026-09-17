@@ -1,11 +1,13 @@
 ﻿using IdentityHub.Entities;
 using IdentityHub.Models.Role;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace IdentityHub.Controllers
 {
+	[Authorize(Roles = "Admin")]
 	public class RoleController : Controller
 	{
 		private readonly RoleManager<IdentityRole> _roleManager;

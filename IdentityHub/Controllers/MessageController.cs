@@ -1,12 +1,14 @@
 ﻿using IdentityHub.Context;
 using IdentityHub.Entities;
 using IdentityHub.Models.Message;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace IdentityHub.Controllers
 {
+	[Authorize]
 	public class MessageController : Controller
 	{
 		private readonly IdentityContext _context;

@@ -19,8 +19,8 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddIdentity<AppUser, IdentityRole>()
 	.AddEntityFrameworkStores<IdentityContext>()
-	.AddErrorDescriber<CustomIdentityValidator>().
-	AddTokenProvider<DataProtectorTokenProvider<AppUser>>(TokenOptions.DefaultProvider);
+	.AddErrorDescriber<CustomIdentityValidator>()
+	.AddTokenProvider<DataProtectorTokenProvider<AppUser>>(TokenOptions.DefaultProvider);
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
@@ -29,10 +29,14 @@ builder.Services.ConfigureApplicationCookie(options =>
 });
 
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
-
 var jwtSettings = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>();
 
 builder.Services.AddAuthentication()
+	.AddGoogle(options =>
+	{
+		options.ClientId = builder.Configuration["Authentication:Google:ClientId"];
+		options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
+	})
 	.AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, opt =>
 	{
 		opt.TokenValidationParameters = new TokenValidationParameters
@@ -73,6 +77,5 @@ app.MapControllerRoute(
 	name: "default",
 	pattern: "{controller=Home}/{action=Index}/{id?}")
 	.WithStaticAssets();
-
 
 app.Run();

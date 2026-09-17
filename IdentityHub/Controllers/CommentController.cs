@@ -1,12 +1,14 @@
 ﻿using IdentityHub.Context;
 using IdentityHub.Entities;
 using IdentityHub.ML;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace IdentityHub.Controllers
 {
+	[Authorize] 
 	public class CommentController : Controller
 	{
 		private readonly IdentityContext _context;
@@ -20,6 +22,7 @@ namespace IdentityHub.Controllers
 			_configuration = configuration;
 		}
 
+		[Authorize(Roles = "Admin,Moderatör")]
 		public IActionResult Index()
 		{
 			var comments = _context.Comments
@@ -31,20 +34,20 @@ namespace IdentityHub.Controllers
 		}
 
 		[HttpPost]
+		[Authorize(Roles = "Admin,Moderatör")]
 		public IActionResult ChangeStatus(int id, CommentStatus newStatus)
 		{
 			var comment = _context.Comments.Find(id);
-
 			if (comment != null)
 			{
 				comment.Status = newStatus;
 				_context.SaveChanges();
 			}
-
 			return RedirectToAction("Index");
 		}
 
 		[HttpPost]
+		[Authorize(Roles = "Admin,Moderatör")]
 		public IActionResult UpdateAllStatuses(Dictionary<int, CommentStatus> statuses)
 		{
 			if (statuses != null && statuses.Count > 0)
@@ -52,18 +55,26 @@ namespace IdentityHub.Controllers
 				foreach (var kvp in statuses)
 				{
 					int commentId = kvp.Key;
-					CommentStatus newStatus = kvp.Value;
-
 					var comment = _context.Comments.Find(commentId);
 					if (comment != null)
 					{
-						comment.Status = newStatus;
+						comment.Status = kvp.Value;
 					}
 				}
-
 				_context.SaveChanges();
 			}
+			return RedirectToAction("Index");
+		}
 
+		[Authorize(Roles = "Admin,Moderatör")]
+		public IActionResult Delete(int id)
+		{
+			var comment = _context.Comments.Find(id);
+			if (comment != null)
+			{
+				_context.Comments.Remove(comment);
+				_context.SaveChanges();
+			}
 			return RedirectToAction("Index");
 		}
 
@@ -91,34 +102,17 @@ namespace IdentityHub.Controllers
 				var prediction = ToxicityModel.GetPrediction(comment.CommentDetail);
 
 				if (prediction.IsToxic && prediction.Probability < 0.70f)
-				{
 					comment.Status = CommentStatus.OnayBekliyor;
-				}
 				else if (prediction.IsToxic && prediction.Probability >= 0.70f)
-				{
 					comment.Status = CommentStatus.Toksik;
-				}
 				else
-				{
 					comment.Status = CommentStatus.Onaylandi;
-				}
 
 				_context.Comments.Add(comment);
 				await _context.SaveChangesAsync();
 			}
 
 			return RedirectToAction("Forum");
-		}
-
-		public IActionResult Delete(int id)
-		{
-			var comment = _context.Comments.Find(id);
-			if (comment != null)
-			{
-				_context.Comments.Remove(comment);
-				_context.SaveChanges();
-			}
-			return RedirectToAction("Index");
 		}
 	}
 }
