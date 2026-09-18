@@ -1,4 +1,5 @@
-﻿@model List<AppUser>
+﻿@using IdentityHub.Entities
+@model List<AppUser>
 @{
 	ViewData["Title"] = "Kullanıcı Listesi";
 	int count = 0;
@@ -23,10 +24,11 @@
 										<thead style="background-color: #343a40;">
 											<tr>
 												<th class="text-center" style="width: 5%; color: #ffffff !important;">#</th>
-												<th class="text-center" style="width: 25%; color: #ffffff !important;">Ad Soyad</th>
-												<th class="text-center" style="width: 20%; color: #ffffff !important;">Kullanıcı Adı</th>
-												<th class="text-center" style="width: 35%; color: #ffffff !important;">Kullanıcı Email</th>
-												<th class="text-center" style="width: 15%; color: #ffffff !important;">İşlem</th>
+												<th class="text-center" style="width: 20%; color: #ffffff !important;">Ad Soyad</th>
+												<th class="text-center" style="width: 15%; color: #ffffff !important;">Kullanıcı Adı</th>
+												<th class="text-center" style="width: 20%; color: #ffffff !important;">Kullanıcı Email</th>
+												<th class="text-center" style="width: 15%; color: #ffffff !important;">Durum</th>
+												<th class="text-center" style="width: 25%; color: #ffffff !important;">İşlem</th>
 											</tr>
 										</thead>
 										<tbody>
@@ -39,9 +41,32 @@
 													<td>@item.UserName</td>
 													<td>@item.Email</td>
 													<td>
-														<a href="/User/AssignRole/@item.Id/" class="btn btn-sm btn-warning" style="padding: 5px 15px;">
+														@if (item.IsActive)
+														{
+															<span style="background-color: #28a745; color: white; padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: bold;">Aktif</span>
+														}
+														else
+														{
+															<span style="background-color: #dc3545; color: white; padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: bold;">Pasif</span>
+														}
+													</td>
+													<td>
+														<a href="/User/AssignRole/@item.Id/" class="btn btn-sm btn-warning" style="padding: 5px 15px; margin-right: 5px;">
 															Rol Ata
 														</a>
+
+														@if (item.IsActive)
+														{
+															<a href="/User/ChangeStatus/@item.Id/" class="btn btn-sm btn-danger" onclick="return confirm('Bu kullanıcıyı askıya almak istediğinize emin misiniz?');" style="padding: 5px 15px;">
+																Askıya Al
+															</a>
+														}
+														else
+														{
+															<a href="/User/ChangeStatus/@item.Id/" class="btn btn-sm btn-success" onclick="return confirm('Bu kullanıcının hesabını tekrar aktifleştirmek istediğinize emin misiniz?');" style="padding: 5px 15px;">
+																Aktifleştir
+															</a>
+														}
 													</td>
 												</tr>
 											}
@@ -55,7 +80,6 @@
 									<strong>Bilgi!</strong> Sistemde kayıtlı kullanıcı bulunmamaktadır.
 								</div>
 							}
-
 						</div>
 					</div>
 

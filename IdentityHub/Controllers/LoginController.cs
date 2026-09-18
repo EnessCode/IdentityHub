@@ -44,6 +44,12 @@ namespace IdentityHub.Controllers
 				return View(model);
 			}
 
+			if (!user.IsActive)
+			{
+				ModelState.AddModelError("", "Hesabınız sistem yöneticisi tarafından askıya alınmıştır.");
+				return View(model);
+			}
+
 			if (!user.EmailConfirmed)
 			{
 				ModelState.AddModelError("", "Lütfen giriş yapmadan önce e-posta adresinizi doğrulayın.");
@@ -89,6 +95,20 @@ namespace IdentityHub.Controllers
 				return RedirectToAction("Index");
 			}
 
+			var email = info.Principal.FindFirstValue(ClaimTypes.Email);
+
+			var user = await _userManager.FindByLoginAsync(info.LoginProvider, info.ProviderKey);
+			if (user == null && email != null)
+			{
+				user = await _userManager.FindByEmailAsync(email);
+			}
+
+			if (user != null && !user.IsActive)
+			{
+				TempData["Error"] = "Hesabınız sistem yöneticisi tarafından askıya alınmıştır.";
+				return RedirectToAction("Index");
+			}
+
 			var result = await _signInManager.ExternalLoginSignInAsync
 				(info.LoginProvider, info.ProviderKey, isPersistent: false);
 
@@ -98,10 +118,6 @@ namespace IdentityHub.Controllers
 			}
 			else
 			{
-				var email = info.Principal.FindFirstValue(ClaimTypes.Email);
-
-				var user = await _userManager.FindByEmailAsync(email);
-
 				if (user == null)
 				{
 					var givenName = info.Principal.FindFirstValue(ClaimTypes.GivenName) ?? info.Principal.FindFirstValue(ClaimTypes.Name) ?? email.Split('@')[0];
@@ -113,7 +129,8 @@ namespace IdentityHub.Controllers
 						Email = email,
 						Name = givenName,
 						Surname = surname,
-						EmailConfirmed = true
+						EmailConfirmed = true,
+						IsActive = true 
 					};
 
 					var identityResult = await _userManager.CreateAsync(user);

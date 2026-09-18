@@ -25,6 +25,19 @@ namespace IdentityHub.Controllers
 			return View(users);
 		}
 
+		public async Task<IActionResult> ChangeStatus(string id)
+		{
+			if (string.IsNullOrEmpty(id)) return NotFound();
+
+			var user = await _userManager.FindByIdAsync(id);
+			if (user == null) return NotFound();
+
+			user.IsActive = !user.IsActive;
+
+			await _userManager.UpdateAsync(user);
+			return RedirectToAction("Index");
+		}
+
 		[HttpGet]
 		public async Task<IActionResult> AssignRole(string id)
 		{
