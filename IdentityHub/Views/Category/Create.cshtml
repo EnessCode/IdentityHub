@@ -1,0 +1,57 @@
+﻿@using IdentityHub.Entities
+@model Category
+@{
+	ViewData["Title"] = "Yeni Kategori Ekle";
+}
+
+<div class="form-element-area">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+				<div class="form-element-list" style="background-color: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+
+					<div class="basic-tb-hd" style="margin-bottom: 20px; border-bottom: 2px solid #f5f5f5; padding-bottom: 15px;">
+						<h2 style="margin: 0; color: #333;">Yeni Kategori Ekle</h2>
+					</div>
+
+					<form asp-controller="Category" asp-action="Create" method="post">
+						<div class="row">
+							<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+								<div class="form-group" style="margin-bottom: 15px;">
+									<label class="form-label" style="font-weight: bold; color: #555;">Kategori Adı</label>
+									<input type="text" asp-for="Name" class="form-control" placeholder="Örn: Yazılım, Tasarım..." required style="border-radius: 5px; padding: 10px; border: 1px solid #ddd;" />
+									<span asp-validation-for="Name" class="text-danger"></span>
+								</div>
+							</div>
+
+							<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+								<div class="form-group" style="margin-bottom: 15px;">
+									<label class="form-label" style="font-weight: bold; color: #555;">İkon Sınıfı / URL</label>
+									<input type="text" asp-for="IconUrl" class="form-control" placeholder="Örn: fa fa-code veya resim URL'i" style="border-radius: 5px; padding: 10px; border: 1px solid #ddd;" />
+								</div>
+							</div>
+
+							<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+								<div class="form-group" style="margin-bottom: 15px;">
+									<label class="form-label" style="font-weight: bold; color: #555;">Durum</label>
+									<select asp-for="Status" class="form-control" style="border-radius: 5px; height: 42px; padding-left: 15px; border: 1px solid #ddd;">
+										<option value="true">Aktif</option>
+										<option value="false">Pasif</option>
+									</select>
+								</div>
+							</div>
+						</div>
+
+						<div class="row" style="margin-top: 20px;">
+							<div class="col-lg-12">
+								<button type="submit" class="btn btn-success" style="padding: 10px 25px; font-weight: bold; margin-right: 10px;">Kaydet</button>
+								<a href="/Category/Index/" class="btn btn-secondary" style="padding: 10px 25px;">İptal ve Geri Dön</a>
+							</div>
+						</div>
+					</form>
+
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

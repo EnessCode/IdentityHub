@@ -1,0 +1,82 @@
+﻿@using IdentityHub.Entities
+@model List<Category>
+@{
+	ViewData["Title"] = "Kategori Listesi";
+	int count = 0;
+}
+
+<div class="form-element-area">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+				<div class="form-element-list" style="background-color: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+
+					<div class="basic-tb-hd d-flex justify-content-between align-items-center" style="margin-bottom: 20px; border-bottom: 2px solid #f5f5f5; padding-bottom: 15px;">
+						<h2 style="margin: 0; color: #333;">Kategori Listesi</h2>
+						<a href="/Category/Create/" class="btn btn-success" style="padding: 8px 20px; font-weight: bold;">+ Yeni Kategori Ekle</a>
+					</div>
+
+					<div class="row">
+						<div class="col-12">
+							@if (Model != null && Model.Count > 0)
+							{
+								<div class="table-responsive">
+									<table class="table table-bordered table-striped table-hover text-center align-middle" style="background-color: #fff;">
+										<thead style="background-color: #343a40;">
+											<tr>
+												<th class="text-center" style="width: 5%; color: #ffffff !important;">#</th>
+												<th class="text-center" style="width: 15%; color: #ffffff !important;">İkon</th>
+												<th class="text-center" style="width: 35%; color: #ffffff !important;">Kategori Adı</th>
+												<th class="text-center" style="width: 15%; color: #ffffff !important;">Durum</th>
+												<th class="text-center" style="width: 30%; color: #ffffff !important;">İşlemler</th>
+											</tr>
+										</thead>
+										<tbody>
+											@foreach (var item in Model)
+											{
+												count++;
+												<tr>
+													<td style="font-weight: bold;">@count</td>
+													<td>
+														<i class="@item.IconUrl" style="font-size: 18px; color: #555;"></i>
+														<span style="font-size:12px; color:#999; display:block;">@item.IconUrl</span>
+													</td>
+													<td>@item.Name</td>
+													<td>
+														@if (item.Status)
+														{
+															<span style="background-color: #28a745; color: white; padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: bold;">Aktif</span>
+														}
+														else
+														{
+															<span style="background-color: #dc3545; color: white; padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: bold;">Pasif</span>
+														}
+													</td>
+													<td>
+														<a href="/Category/Update/@item.Id/" class="btn btn-sm btn-primary" style="padding: 5px 15px; margin-right: 5px;">
+															Güncelle
+														</a>
+														<a href="/Category/Delete/@item.Id/" class="btn btn-sm btn-danger" onclick="return confirm('@item.Name kategorisini kalıcı olarak silmek istediğinize emin misiniz?');" style="padding: 5px 15px;">
+															Sil
+														</a>
+													</td>
+												</tr>
+											}
+										</tbody>
+									</table>
+								</div>
+							}
+							else
+							{
+								<div class="alert alert-warning" role="alert" style="border-left: 5px solid #ffc107;">
+									<strong>Bilgi!</strong> Sistemde henüz kayıtlı bir kategori bulunmamaktadır.
+								</div>
+							}
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
